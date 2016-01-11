@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>无标题文档</title>
+<style>
+#div1{width:100px; height:100px; background:#ccc; position:absolute;}
+</style>
+<script>
+var a,b,c,d;
+window.onload=function(){
+	var oDiv=document.getElementById('div1');
+	setInterval(function(){
+			if(a)
+			{
+				oDiv.style.left=oDiv.offsetLeft-10+"px"
+			}
+			else if(b)
+			{
+				oDiv.style.left=oDiv.offsetLeft+10+"px"
+			}
+			else if(c)
+			{
+				oDiv.style.top=oDiv.offsetTop-10+"px"
+			}
+			else if(d)
+			{
+				oDiv.style.top=oDiv.offsetTop+10+"px"
+			}
+	},40)
+}
+document.onkeydown=function (ev)
+{
+	var oEvent=ev||event;
+	switch(oEvent.keyCode){
+		case 37:a=true;
+		break;
+		case 39:b=true;
+		break;
+		case 38:c=true;
+		break;
+		case 40:d=true;
+		break;
+	}
+};
+document.onkeyup=function(ev){
+	var oEvent=ev||event;
+	switch(oEvent.keyCode){
+		case 37:a=false;
+		break;
+		case 39:b=false;
+		break;
+		case 38:c=false;
+		break;
+		case 40:d=false;
+		break
+	}
+};
+</script>
+</head>
+
+<body>
+<div id="div1"></div>
+</body>
+</html>
