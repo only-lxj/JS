@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>评论框，搜索框</title>
+<script type="text/javascript">
+function toDouble(n){
+	if(n<10)	return '0'+n;
+	else	return ''+n;
+}
+
+window.onload=function(){
+	//评论
+	var d=document.getElementById('submit');
+	var b=document.getElementById('commentArea');
+	d.onclick=function()
+	{
+		var c=document.createElement('div');
+		var f=b.getElementsByTagName('div');
+		var myDate = new Date();
+		var g=myDate.getFullYear()+'/'+(myDate.getMonth()+1)+'/'+myDate.getDate()+'&nbsp;&nbsp;'+toDouble(myDate.getHours())+':'+toDouble(myDate.getMinutes());
+		var h=b.getElementsByTagName('a');	
+		c.innerHTML='<p style="color:blue;padding:5px 0 0 0;">花花</p>'+
+		'<p id="changeArea" style="padding:10px 0;">'+document.all.txt1.value+'</p>'+
+		'<span style="font-size:12px;">'+g+'</span>'+
+		'<a href="javascript:;">删除</a>'+'<br/>';
+		b.insertBefore(c,f[0]);
+		for(var i=0;i<h.length;i++)
+		{
+			h[i].onclick=function ()
+			{
+				b.removeChild(this.parentNode);
+			};	
+		}
+		document.all.txt1.value='';			
+	};
+	var m=document.getElementById('change');
+	m.onclick=function()
+	{
+		var f=b.getElementsByTagName('div');
+		f[0].style.color='red';	
+	};
+	
+	
+	//搜索
+	var cot=document.getElementById('content');
+	var cots=cot.getElementsByTagName('div');
+	var but=document.getElementById('search');
+	var sea=document.getElementById('searchArea');
+	function sousuo()
+	{
+		var arr=new Array()
+		for(var i=0;i<cots.length;i++)
+		{
+			var contentStr=cots[i].innerHTML.toLowerCase();
+			var searchStr=sea.value.toLowerCase();
+			var strs=searchStr.split(' ');
+			cots[i].style.display='none';
+			for(var j=0;j<strs.length;j++)
+			{
+				if(contentStr.search(strs[j])!=-1)
+				{
+					cots[i].style.display='block';
+					arr.push(a);
+				}
+			}			
+		}
+		if(arr.length==0)
+		{
+			alert('搜索内容不存在');
+		}
+	};
+	but.onclick=function()
+	{
+		sousuo();
+	}
+	sea.onkeydown=function(ev)
+	{
+		var oEvent=ev||event;
+		if(oEvent.keyCode==13)
+		{
+			sousuo();
+		}
+	}
+}
+
+</script>
+
+<style type="text/css">
+body{margin:0; padding:0; font-size:12px; font-family:"宋体";}
+h1,h2,ul,li,img,dl,dt,dd,p,span,a{margin:0; padding:0; list-style:none; border:0;}
+#commentArea{width:600px; background-color:#ccc; overflow:hidden; padding:30px 50px; position:relative;}
+#commentArea div{border-bottom:1px dashed #000; font-size:14px;}
+#commentArea div a{text-decoration:none; color:#000; position:absolute; right:50px; font-size:12px;}
+#content div{width:100px; height:20px; border:1px solid #000;}
+</style>
+</head>
+
+<body>
+<textarea id="txt1" name="txt1" cols="83" rows="4"></textarea><br/>
+<input id="submit" type="button" value="提交评论" />
+<div id="commentArea">
+    <div>
+        <p style="color:blue;padding:10px 0 0 0;">花花</p>
+        <p style="padding:10px 0;">这是一条长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长长评论</p>
+        <span style="font-size:12px;">2015/9/24&nbsp;&nbsp;10:18</span>
+        <a href="javascript:;">删除</a><br/>
+    </div>
+    <div>
+        <p style="color:blue;padding:10px 0 0 0;">花花</p>
+        <p style="padding:10px 0;">这是一条没用的评论</p>
+        <span style="font-size:12px;">2015/9/23&nbsp;&nbsp;08:06</span>
+        <a href="javascript:;">删除</a><br/>
+    </div>
+</div>
+<input id="change" type="button" value="改变" />
+<br/><br/>
+<input id="searchArea" type="text" />
+<input id="search" type="button" value="搜索" />
+<div id="content">
+	<div>月季花</div>
+    <div>玫瑰花</div>
+    <div>海棠花</div>
+    <div>牡丹花</div>
+    <div>梅花</div>
+    <div>腊梅</div>
+    <div>Flower</div>
+</div>
+
+</body>
+</html>
