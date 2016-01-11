@@ -1,0 +1,82 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>带框拖拽</title>
+<style>
+#div1{width:100px; height:100px; background:#ccc; position:absolute;}
+.box{border:1px solid #000; position:absolute;}
+</style>
+<script>
+window.onload=function()
+{
+	var oDiv=document.getElementById("div1");
+	var disX=0;
+	var disY=0;
+	oDiv.onmousedown=function(ev)
+	{
+		var oEvent=ev||event;
+		disX=oEvent.clientX-oDiv.offsetLeft;
+		disY=oEvent.clientY-oDiv.offsetTop;
+		
+		//外框
+		var oBox=document.createElement('div');
+		oBox.className="box";
+		oBox.style.width=oDiv.offsetWidth-2+'px';
+		oBox.style.height=oDiv.offsetHeight-2+'px';
+		oBox.style.left=oDiv.offsetLeft+'px';
+		oBox.style.top=oDiv.offsetTop+'px';
+		document.body.appendChild(oBox);
+		
+		if(oDiv.setCapture)               //IE
+		{
+			oDiv.onmousemove=mouseMove;	
+			oDiv.onmouseup=mouseUp;
+			oDiv.setCapture();
+		}
+		else                          //FF,Chrome
+		{
+			document.onmousemove=mouseMove;	
+			document.onmouseup=mouseUp;
+		}
+		
+		function mouseMove(ev)
+		{
+			var oEvent=ev||event;
+			var x=oEvent.clientX-disX;
+			var y=oEvent.clientY-disY;
+			if(x<10)       //无法移出，吸附
+			{x=0;}
+			else if(x>document.documentElement.clientWidth-oDiv.offsetWidth-10)
+			{x=document.documentElement.clientWidth-oDiv.offsetWidth;}
+			if(y<10)
+			{y=0;}
+			else if(y>document.documentElement.clientHeight-oDiv.offsetHeight-10)
+			{y=document.documentElement.clientHeight-oDiv.offsetHeight;}
+			oBox.style.left=x+'px';
+			oBox.style.top=y+'px';
+		}
+		function mouseUp()
+		{
+			this.onmousemove=null;
+			this.onmouseup=null;
+			if(oDiv.releaseCapture)
+			{
+				oDiv.releaseCapture();
+			}
+			oDiv.style.left=oBox.offsetLeft+'px';
+			oDiv.style.top=oBox.offsetTop+'px';
+			document.body.removeChild(oBox);
+		}
+		return false;
+	}
+	
+}
+</script>
+</head>
+
+<body>
+是大发哥哥阿斯顿嘎·阿斯顿公司的风格公司分管
+<div id="div1">被拖拽</div>
+</body>
+</html>
