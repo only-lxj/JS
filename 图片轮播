@@ -1,0 +1,226 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>图片轮播</title>
+<link type="text/css" href="style.css" rel="stylesheet" />
+<script type="text/javascript" src="js.js"></script>
+</head>
+
+<body>
+<div id="playimages" class="play">
+	<ul class="big_pic">
+    	<div class="prev"></div>
+        <div class="next"></div>
+        <div class="text">图片说明</div>
+        <div class="length"></div>
+        <a class="mark_left" href="javascript:;"></a>
+        <a class="mark_right" href="javascript:;"></a>
+        <div class="bg"></div>
+        <li style="z-index:1"><img src="images/1.jpg" /></li>
+        <li><img src="images/2.jpg" /></li>
+        <li><img src="images/3.jpg" /></li>
+        <li><img src="images/4.jpg" /></li>
+        <li><img src="images/5.jpg" /></li>
+        <li><img src="images/6.jpg" /></li>
+    </ul>
+    <div class="small_pic">
+    	<ul style="width:390px;">
+        	<li style="fliter:100; opacity:1;"><img src="images/1.jpg" /></li>
+            <li><img src="images/2.jpg" /></li>
+            <li><img src="images/3.jpg" /></li>
+            <li><img src="images/4.jpg" /></li>
+            <li><img src="images/5.jpg" /></li>
+            <li><img src="images/6.jpg" /></li>
+        </ul>
+    </div>
+</div>
+
+</body>
+</html>
+
+@charset "utf-8";
+/* CSS Document */
+body{background:#fff;}
+ul{padding:0; margin:0;}
+li{list-style:none;}
+img{border:0;}
+.play{width:400px; height:430px; margin:50px auto 0; background:#999; font:12px Arial;}
+.big_pic{width:400px; height:320px; overflow:hidden; background:#222; position:relative;}
+.big_pic li{width:400px; height:320px; overflow:hidden; position:absolute; top:0; left:0; z-index:0;}
+.big_pic img{width:400px; height:320px;}
+.mark_left{width:200px; height:320px; position:absolute; top:0; left:0; filter:alpha(opacity:0); opacity:0; z-index:1000;}
+.mark_right{width:200px; height:320px; position:absolute; top:0; left:200px; filter:alpha(opacity:0); opacity:0; z-index:1000;}
+.big_pic .prev{width:60px; height:60px; background:url(images/left.png) no-repeat; position:absolute; top:130px; left:10px; z-index:1001; filter:alpha(opacity:0); opacity:0; cursor:pointer;}
+.big_pic .next{width:60px; height:60px; background:url(images/right.png) no-repeat; position:absolute; top:130px; right:10px; z-index:1001; filter:alpha(opacity:0); opacity:0; cursor:pointer;}
+.big_pic .text{position:absolute; left:10px; top:300px; z-index:1000; color:#ccc;}
+.big_pic .length{position:absolute; right:10px; top:300px; z-index:1000; color:#ccc;}
+.big_pic .bg{width:400px; height:25px; background:#000; filter:alpha(opacity:60); opacity:0.6; position:absolute; bottom:0; left:0; z-index:999;}
+.small_pic{width:380px; height:94px; position:relative; top:7px; left:10px; overflow:hidden;}
+.small_pic ul{height:94px; position:absolute; top:0; left:0;}
+.small_pic li{width:120px; height:94px; float:left; padding-right:10px; cursor:pointer; filter:alpha(opacity:60); opacity:0.6;}
+.small_pic img{width:120px; height:94px;}
+
+// JavaScript Document
+function getStyle(obj,name)
+{
+	if(obj.currentStyle)
+	{
+		return obj.currentStyle[name];
+	}
+	else
+	{
+		return getComputedStyle(obj,false)[name];
+	}
+}
+function startMove(obj,attr,iTarget,rate)
+{
+	clearInterval(obj.timer);
+	obj.timer=setInterval(function(){
+		var initial=0;
+		if(attr=='opacity')
+		{
+			initial=Math.round(parseFloat(getStyle(obj,attr))*100);
+		}
+		else
+		{
+			initial=parseInt(getStyle(obj, attr));
+		}
+		var speed=(iTarget-initial)*rate;
+		speed=speed>0?Math.ceil(speed):Math.floor(speed);
+		if(initial==iTarget)
+		{
+			clearInterval(obj.timer);
+		}
+		else
+		{
+			if(attr=='opacity')
+			{
+				obj.style.filter='alpha(opacity:'+(initial+speed)+')';
+				obj.style.opacity=(initial+speed)/100;
+			}
+			else
+			{
+				obj.style[attr]=initial+speed+'px';
+			}
+		}		
+	},30);	
+}
+
+window.onload=function()
+{
+	var odiv=document.getElementById('playimages');
+	var btnPrev=document.getElementsByClassName('prev')[0];
+	var btnNext=document.getElementsByClassName('next')[0];
+	var markLeft=document.getElementsByClassName('mark_left')[0];
+	var markRight=document.getElementsByClassName('mark_right')[0];
+	
+	var divSmall=document.getElementsByClassName('small_pic')[0];
+	var ulSmall=divSmall.getElementsByTagName('ul')[0];
+	var liSmall=divSmall.getElementsByTagName('li');
+	var ulBig=document.getElementsByClassName('big_pic')[0];
+	var liBig=ulBig.getElementsByTagName('li');
+	var nowZindex=2;
+	var now=0;
+	
+	var oText=document.getElementsByClassName('text')[0];
+	var oLength=document.getElementsByClassName('length')[0];
+	var text=new Array('鍟�','鍝�','鍡�','濂�','鍝�','鍛�');
+	oText.innerHTML=text[0];
+	oLength.innerHTML=1+'/'+liSmall.length;
+	ulSmall.style.width=liSmall.length*liSmall[0].offsetWidth+'px';
+	
+	btnPrev.onmouseover=markLeft.onmouseover=function()
+	{
+		startMove(btnPrev,'opacity',100,0.3);		
+	}
+	btnPrev.onmouseout=markLeft.onmouseout=function()
+	{
+		startMove(btnPrev,'opacity',0,0.3);		
+	}
+	btnNext.onmouseover=markRight.onmouseover=function()
+	{
+		startMove(btnNext,'opacity',100,0.3);		
+	}
+	btnNext.onmouseout=markRight.onmouseout=function()
+	{
+		startMove(btnNext,'opacity',0,0.3);		
+	}
+	
+	for(var i=0;i<liSmall.length;i++)
+	{
+		liSmall[i].index=i;
+		liSmall[i].onclick=function()
+		{
+			if(this.index==now)return;
+			now=this.index;
+			tab();			
+		}	
+		liSmall[i].onmouseover=function()
+		{
+			startMove(this,'opacity',100,0.3);
+		}
+		liSmall[i].onmouseout=function()
+		{
+			if(this.index!=now)
+			{
+				startMove(this,'opacity',60,0.3);
+			}
+		}
+	}
+	function tab()
+	{
+		liBig[now].style.zIndex=nowZindex++;
+		for(var i=0;i<liSmall.length;i++)
+		{
+			startMove(liSmall[i],'opacity',60,0.3);
+		}
+		startMove(liSmall[now],'opacity',100,0.3);
+		liBig[now].style.height=0;
+		startMove(liBig[now],'height',345,0.2);
+		if(now==0)
+		{
+			startMove(ulSmall,'left',0,0.3)
+		}
+		else if(now==liSmall.length-1)
+		{
+			startMove(ulSmall,'left',-(now-2)*liSmall[0].offsetWidth,0.3)	
+		}
+		else
+		{
+			startMove(ulSmall,'left',-(now-1)*liSmall[0].offsetWidth,0.3);
+		}
+		oText.innerHTML=text[now];
+		oLength.innerHTML=(now+1)+'/'+liSmall.length;		
+	}
+	
+	btnPrev.onclick=function()
+	{
+		now--;
+		if(now==-1)
+		{
+			now=liSmall.length-1;	
+		}
+		tab();
+	}
+	btnNext.onclick=function()
+	{
+		now++;
+		if(now==liSmall.length)
+		{
+			now=0;	
+		}
+		tab();
+	}
+	
+	var timer=setInterval(btnNext.onclick,3000);
+	odiv.onmouseover=function()
+	{
+		clearInterval(timer);
+	}
+	odiv.onmouseout=function()
+	{
+		timer=setInterval(btnNext.onclick,3000);
+	}
+	
+}
