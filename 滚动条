@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>滚动条</title>
+<style>
+*{margin:0; padding:0;}
+#main{position:relative;}
+#content{width:200px; height:368px; border:1px solid #000; position:absolute; top:0; left:0; overflow:hidden;}
+#wenzi{position:absolute;}
+#kuang{background:url(image/kuang_03.png); width:15px; height:370px; position:absolute; top:00; left:200px;}
+#kuai{background:url(image/kuai_03.png); width:15px; height:100px; position:absolute; top:15px;}
+#div1{width:0; height:0; background-color:#F00;position:relative; top:0; left:250px; filter:alpha(opacity:0); opacity:0;}
+</style>
+<script>
+window.onload=function()
+{
+	var oWenzi=document.getElementById("wenzi");
+	var oContent=document.getElementById("content");
+	var oDiv=document.getElementById("kuai");
+	var oParent=document.getElementById("kuang");
+	var oDiv1=document.getElementById("div1");
+	var disY=0;
+	oDiv.onmousedown=function(ev)
+	{
+		var oEvent=ev||event;
+		disY=oEvent.clientY-oDiv.offsetTop;
+		if(oDiv.setCapture)               //IE
+		{
+			oDiv.onmousemove=mouseMove;	
+			oDiv.onmouseup=mouseUp;
+			oDiv.setCapture();
+		}
+		else                          //FF,Chrome
+		{
+			document.onmousemove=mouseMove;	
+			document.onmouseup=mouseUp;
+		}
+		
+		function mouseMove(ev)
+		{
+			var oEvent=ev||event;
+			var y=oEvent.clientY-disY;
+			if(y<15)
+			{y=15;}
+			else if(y>oParent.offsetHeight-oDiv.offsetHeight-15)
+			{y=oParent.offsetHeight-oDiv.offsetHeight-15;}
+			oDiv.style.top=y+'px';
+			
+			var scale=(y-15)/(oParent.offsetHeight-oDiv.offsetHeight-30);
+			oWenzi.style.top=-(oWenzi.offsetHeight-oContent.offsetHeight)*scale+'px';
+			oDiv1.style.width=200*scale+'px';
+			oDiv1.style.height=370*scale+'px';
+			oDiv1.style.filter="alpha(opacity:'+scale*100+')";
+			oDiv1.style.opacity=scale;
+		}
+		function mouseUp()
+		{
+			this.onmousemove=null;
+			this.onmouseup=null;
+			if(oDiv.releaseCapture)
+			{
+				oDiv.releaseCapture();
+			}
+		}
+		return false;
+	}
+	
+}
+</script>
+</head>
+
+<body>
+<div id="main">
+    <div id="content">
+    	<div id="wenzi">
+            1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>
+            1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>
+            1<br/>2<br/>3<br/>4<br/>5<br/>6<br/>7<br/>8<br/>9<br/>10<br/>
+        </div>
+    </div>
+    <div id="kuang">
+        <div id="kuai"></div>
+    </div>
+</div>
+<div id="div1"></div>
+<div id="div2"></div>
+</body>
+</html>
