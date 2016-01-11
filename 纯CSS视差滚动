@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>纯css视差滚动</title>
+<style type="text/css">
+.container{perspective:1px; height:600px; height:calc(100vh - 300px); overflow:auto;}
+.box{height:1280px; transform-style:preserve-3d; position:relative;}
+.back2{position:absolute; transform:translate3D(0,0,-2px) scale(3);}
+.back1{position:absolute; left:50%; transform:translate3D(-50%,200px,-1px) scale(2);}
+.img1{position:absolute; left:200px; top:300px; width:200px; height:200px;}
+.img2{position:absolute; right:200px; top:600px; width:200px; height:200px;}
+</style>
+</head>
+<div class="container">
+	<div class="box">
+    	<img class="back2" src="img/3bf33a87e950352a8af603ac5343fbf2b3118bfa.jpg" />
+        <img class="back1" src="img/mobile_1_iphone.jpg" />
+        <img class="img1" src="img/1128880945b798b52el.jpg" />
+        <img class="img2" src="img/20140929205642_CfStQ.jpeg" />
+    </div>
+</div>
+<body>
+</body>
+</html>
